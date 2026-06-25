@@ -203,6 +203,15 @@ h1 {
   border-left: 6px solid var(--green);
 }
 
+.error-row .bubble {
+  background: #fff0f0;
+  color: #9f1d1d;
+}
+
+.error-row .bubble::before {
+  border-right-color: #fff0f0;
+}
+
 .thinking-card {
   width: auto;
   background: #fff7d6;

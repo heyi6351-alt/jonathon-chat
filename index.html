@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>Jonathon skill</title>
-    <link rel="stylesheet" href="./style.css?v=20260625-cntime1" />
+    <link rel="stylesheet" href="./style.css?v=20260625-stable1" />
   </head>
   <body>
     <main class="phone-shell">
@@ -63,12 +63,11 @@
           <input id="proxyUrlInput" type="url" placeholder="https://your-worker.workers.dev" />
         </label>
         <div class="switch-row">
-          <span>启用模型 thinking 参数</span>
-          <input id="thinkingInput" type="checkbox" />
+          <span>显示本地思考摘要</span>
+          <input id="thinkingInput" type="checkbox" disabled />
         </div>
         <p class="hint">
-          直接模式会从浏览器请求模型 API，Key 存在 localStorage；若遇到 CORS，请部署同目录的
-          <code>worker.js</code>，并填入 Proxy URL。
+          当前使用 Cloudflare Worker 代理连接 DeepSeek。为避免空回复，已关闭模型 thinking 参数；左下角按钮仍可显示本地回复计划。
         </p>
         <menu>
           <button id="clearButton" type="button" class="danger-button">清空聊天记录</button>
@@ -91,6 +90,6 @@
       </form>
     </dialog>
 
-    <script type="module" src="./app.js?v=20260625-cntime1"></script>
+    <script type="module" src="./app.js?v=20260625-stable1"></script>
   </body>
 </html>

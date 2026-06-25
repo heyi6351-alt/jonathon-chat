@@ -57,7 +57,7 @@ const defaults = {
   model: "deepseek-chat",
   apiKey: "",
   proxyUrl: "https://jonathon-chat-proxy.heyi6351.workers.dev",
-  thinking: true
+  thinking: false
 };
 
 const state = {
@@ -82,6 +82,8 @@ async function boot() {
   await loadPublicConfig();
   clearLegacyChatRecords();
   ensureProxyDefault();
+  ensureStableModelSettings();
+  removeErrorMessagesFromHistory();
   bindSettings();
   bindMemoryPanel();
   migrateRoleDirection();
@@ -103,6 +105,31 @@ function ensureProxyDefault() {
   if (state.settings.apiKey || state.settings.proxyUrl || !defaults.proxyUrl) return;
   state.settings.proxyUrl = defaults.proxyUrl;
   localStorage.setItem(STORE.settings, JSON.stringify(state.settings));
+}
+
+function ensureStableModelSettings() {
+  let changed = false;
+  if (state.settings.provider === "deepseek" && state.settings.thinking) {
+    state.settings.thinking = false;
+    changed = true;
+  }
+  if (state.settings.model !== "deepseek-chat") {
+    state.settings.model = "deepseek-chat";
+    changed = true;
+  }
+  if (changed) localStorage.setItem(STORE.settings, JSON.stringify(state.settings));
+}
+
+function removeErrorMessagesFromHistory() {
+  const before = state.messages.length;
+  state.messages = state.messages.filter((message) => {
+    if (message.role === "error") return false;
+    if (message.role !== "assistant") return true;
+    return !String(message.content || "").startsWith("模型没连上");
+  });
+  if (state.messages.length !== before) {
+    localStorage.setItem(STORE.messages, JSON.stringify(state.messages));
+  }
 }
 
 async function loadPublicConfig() {
@@ -155,7 +182,7 @@ async function respond(userText) {
     mergeMemory(result.memory_updates);
   } catch (error) {
     console.error(error);
-    addMessage("assistant", connectionErrorReply(error), "模型连接失败，没有生成 Jonathon 回复。");
+    addMessage("error", connectionErrorReply(error), "模型连接失败，没有生成 Jonathon 回复。");
   } finally {
     sendButton.disabled = false;
     updateStatus();
@@ -237,7 +264,7 @@ async function callModel(userText, plan) {
 
   const messages = [
     { role: "system", content: systemPrompt(plan) },
-    ...state.messages.slice(-16).map((m) => ({ role: m.role, content: m.content })),
+    ...modelHistoryMessages(),
     { role: "user", content: userText }
   ];
 
@@ -250,16 +277,32 @@ async function callModel(userText, plan) {
     response_format: { type: "json_object" }
   };
 
-  if (settings.thinking) {
-    body.thinking = { type: "enabled" };
-    body.reasoning_effort = "medium";
-  }
-
   const endpoint = settings.proxyUrl || `${settings.baseUrl.replace(/\/$/, "")}/chat/completions`;
   const headers = { "Content-Type": "application/json" };
   if (!settings.proxyUrl) headers.Authorization = `Bearer ${settings.apiKey}`;
   if (settings.proxyUrl && settings.apiKey) headers["X-User-Api-Key"] = settings.apiKey;
 
+  let data = await postChat(endpoint, headers, body);
+  let content = data.choices?.[0]?.message?.content || "";
+  if (!content.trim()) {
+    const retryBody = { ...body };
+    delete retryBody.response_format;
+    data = await postChat(endpoint, headers, retryBody);
+    content = data.choices?.[0]?.message?.content || "";
+  }
+  if (!content.trim()) throw new Error("API returned empty message content");
+  return parseModelJson(content);
+}
+
+function modelHistoryMessages() {
+  return state.messages
+    .filter((message) => message.role === "user" || message.role === "assistant")
+    .filter((message) => !String(message.content || "").startsWith("模型没连上"))
+    .slice(-16)
+    .map((message) => ({ role: message.role, content: message.content }));
+}
+
+async function postChat(endpoint, headers, body) {
   const response = await fetch(endpoint, {
     method: "POST",
     headers,
@@ -269,10 +312,7 @@ async function callModel(userText, plan) {
     const errorText = await response.text();
     throw new Error(`API ${response.status}: ${errorText.slice(0, 180)}`);
   }
-  const data = await response.json();
-  const content = data.choices?.[0]?.message?.content || "";
-  if (!content) throw new Error("API returned no message content");
-  return parseModelJson(content);
+  return response.json();
 }
 
 function systemPrompt(plan) {
@@ -415,7 +455,7 @@ function render() {
   chatLog.appendChild(day);
   for (const message of state.messages) {
     const row = document.createElement("div");
-    row.className = `message-row ${message.role === "user" ? "outgoing" : "incoming"}`;
+    row.className = `message-row ${message.role === "user" ? "outgoing" : "incoming"} ${message.role === "error" ? "error-row" : ""}`;
     const avatar = message.role === "user" ? userAvatar() : imageAvatar();
     const bubble = document.createElement("div");
     bubble.className = "bubble";
@@ -472,7 +512,7 @@ function bindSettings() {
     model.value = state.settings.model;
     apiKey.value = state.settings.apiKey;
     proxyUrl.value = state.settings.proxyUrl;
-    thinking.checked = state.settings.thinking;
+    thinking.checked = state.showPlan;
   }
 
   function openSettingsDialog() {
@@ -494,7 +534,7 @@ function bindSettings() {
       model: model.value.trim() || defaults.model,
       apiKey: apiKey.value.trim(),
       proxyUrl: proxyUrl.value.trim(),
-      thinking: thinking.checked
+      thinking: false
     };
     localStorage.setItem(STORE.settings, JSON.stringify(state.settings));
     updateStatus();
