@@ -78,6 +78,7 @@ boot();
 
 async function boot() {
   await loadPublicConfig();
+  ensureProxyDefault();
   bindSettings();
   bindMemoryPanel();
   migrateRoleDirection();
@@ -89,6 +90,12 @@ async function boot() {
   if (!state.settings.apiKey && !state.settings.proxyUrl) {
     setTimeout(() => document.querySelector("#settingsButton")?.click(), 300);
   }
+}
+
+function ensureProxyDefault() {
+  if (state.settings.apiKey || state.settings.proxyUrl || !defaults.proxyUrl) return;
+  state.settings.proxyUrl = defaults.proxyUrl;
+  localStorage.setItem(STORE.settings, JSON.stringify(state.settings));
 }
 
 async function loadPublicConfig() {
