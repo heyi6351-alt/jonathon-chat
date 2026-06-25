@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Jonathon skill</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main class="phone-shell">
+      <header class="chat-header">
+        <button id="settingsButton" class="icon-button" title="设置" aria-label="设置">
+          <span class="icon">⚙</span>
+        </button>
+        <div class="contact">
+          <img src="./assets/jonathon-avatar.svg" alt="" class="avatar" />
+          <div>
+            <h1>Jonathon skill</h1>
+            <p id="statusLine">本地记忆 · 未连接模型</p>
+          </div>
+        </div>
+        <button id="memoryButton" class="icon-button" title="记忆" aria-label="记忆">
+          <span class="icon">⌁</span>
+        </button>
+      </header>
+
+      <section id="chatLog" class="chat-log" aria-live="polite"></section>
+
+      <form id="composer" class="composer">
+        <button type="button" id="planToggle" class="tool-button" title="显示思考摘要">思考</button>
+        <textarea id="messageInput" rows="1" placeholder="发消息给 Jonathon..." autocomplete="off"></textarea>
+        <button id="sendButton" class="send-button" type="submit">发送</button>
+      </form>
+    </main>
+
+    <dialog id="settingsDialog" class="panel-dialog">
+      <form method="dialog" class="panel">
+        <header>
+          <h2>模型设置</h2>
+          <button class="icon-button" value="cancel" aria-label="关闭">×</button>
+        </header>
+        <label>
+          Provider
+          <select id="providerSelect">
+            <option value="deepseek">DeepSeek</option>
+            <option value="openai">OpenAI-compatible</option>
+          </select>
+        </label>
+        <label>
+          Base URL
+          <input id="baseUrlInput" type="url" placeholder="https://api.deepseek.com" />
+        </label>
+        <label>
+          Model
+          <input id="modelInput" type="text" placeholder="deepseek-v4-pro" />
+        </label>
+        <label>
+          API Key
+          <input id="apiKeyInput" type="password" placeholder="只保存在本机浏览器" />
+        </label>
+        <label>
+          Proxy URL（可选，推荐手机长期使用）
+          <input id="proxyUrlInput" type="url" placeholder="https://your-worker.workers.dev" />
+        </label>
+        <div class="switch-row">
+          <span>启用模型 thinking 参数</span>
+          <input id="thinkingInput" type="checkbox" />
+        </div>
+        <p class="hint">
+          直接模式会从浏览器请求模型 API，Key 存在 localStorage；若遇到 CORS，请部署同目录的
+          <code>worker.js</code>，并填入 Proxy URL。
+        </p>
+        <menu>
+          <button id="clearButton" type="button" class="danger-button">清空本地对话</button>
+          <button id="saveSettingsButton" value="default" class="primary-button">保存</button>
+        </menu>
+      </form>
+    </dialog>
+
+    <dialog id="memoryDialog" class="panel-dialog">
+      <form method="dialog" class="panel memory-panel">
+        <header>
+          <h2>长期记忆</h2>
+          <button class="icon-button" value="cancel" aria-label="关闭">×</button>
+        </header>
+        <textarea id="memoryText" rows="12"></textarea>
+        <p class="hint">对话中识别出的重要事实会写在这里，也可以手动编辑。</p>
+        <menu>
+          <button id="saveMemoryButton" value="default" class="primary-button">保存记忆</button>
+        </menu>
+      </form>
+    </dialog>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
