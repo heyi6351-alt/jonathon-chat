@@ -411,7 +411,11 @@ function updateStatus() {
 
 function loadJson(key, fallback) {
   try {
-    return { ...fallback, ...JSON.parse(localStorage.getItem(key)) };
+    const raw = localStorage.getItem(key);
+    if (!raw) return Array.isArray(fallback) ? [...fallback] : { ...fallback };
+    const parsed = JSON.parse(raw);
+    if (Array.isArray(fallback)) return Array.isArray(parsed) ? parsed : [...fallback];
+    return { ...fallback, ...parsed };
   } catch {
     return Array.isArray(fallback) ? [...fallback] : { ...fallback };
   }
