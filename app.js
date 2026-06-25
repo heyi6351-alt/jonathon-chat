@@ -54,13 +54,31 @@ const memoryDialog = document.querySelector("#memoryDialog");
 
 boot();
 
-function boot() {
+async function boot() {
+  await loadPublicConfig();
   bindSettings();
   bindMemoryPanel();
   render();
   updateStatus();
   if (state.messages.length === 0) {
     addMessage("assistant", "叔叔晚上好！\n今天想聊什么？", "欢迎");
+  }
+}
+
+async function loadPublicConfig() {
+  try {
+    const response = await fetch("./config.json", { cache: "no-store" });
+    if (!response.ok) return;
+    const config = await response.json();
+    state.settings = {
+      ...state.settings,
+      ...Object.fromEntries(
+        Object.entries(config).filter(([, value]) => value !== undefined && value !== null && value !== "")
+      )
+    };
+    localStorage.setItem(STORE.settings, JSON.stringify(state.settings));
+  } catch {
+    // config.json is optional for GitHub Pages deployments.
   }
 }
 

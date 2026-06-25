@@ -27,6 +27,17 @@ DeepSeek 官方文档说明其 API 兼容 OpenAI 格式，base_url 为 `https://
 
 这样 API Key 不需要放在手机浏览器里。
 
+## 不想每次输入 API Key
+
+同一个手机/浏览器会自动记住设置。跨设备免输入的推荐方式：
+
+1. 部署 `worker.js`，把 `DEEPSEEK_API_KEY` 放进 Worker 环境变量。
+2. 复制 `config.example.json` 为 `config.json`。
+3. 把 `proxyUrl` 改成你的 Worker URL。
+4. 提交 `config.json` 到 GitHub。
+
+注意：`config.json` 只能放 Proxy URL，不能放 API Key。
+
 ## 本地记忆
 
 - 最近对话、长期记忆、API 设置都保存在当前浏览器 `localStorage`。

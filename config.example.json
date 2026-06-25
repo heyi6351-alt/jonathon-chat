@@ -1,0 +1,7 @@
+{
+  "provider": "deepseek",
+  "baseUrl": "https://api.deepseek.com",
+  "model": "deepseek-v4-pro",
+  "proxyUrl": "https://your-worker.workers.dev",
+  "thinking": true
+}
