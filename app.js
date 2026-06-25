@@ -54,7 +54,7 @@ const defaults = {
   baseUrl: "https://api.deepseek.com",
   model: "deepseek-chat",
   apiKey: "",
-  proxyUrl: "",
+  proxyUrl: "https://jonathon-chat-proxy.heyi6351.workers.dev",
   thinking: true
 };
 
