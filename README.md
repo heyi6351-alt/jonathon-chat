@@ -12,9 +12,9 @@
 默认 DeepSeek 设置：
 
 - Base URL: `https://api.deepseek.com`
-- Model: `deepseek-v4-pro`
+- Model: `deepseek-v4-flash`
 
-DeepSeek 官方文档说明其 API 兼容 OpenAI 格式，base_url 为 `https://api.deepseek.com`，示例模型包括 `deepseek-v4-pro`。
+DeepSeek 官方文档说明其 API 兼容 OpenAI 格式，base_url 为 `https://api.deepseek.com`，示例模型包括 `deepseek-v4-flash` 和 `deepseek-v4-pro`。本项目默认使用更轻的 `deepseek-v4-flash`。
 
 ## 推荐：用 Cloudflare Worker 代理
 

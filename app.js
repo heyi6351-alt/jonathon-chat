@@ -30,7 +30,7 @@ const STORE = {
 const defaults = {
   provider: "deepseek",
   baseUrl: "https://api.deepseek.com",
-  model: "deepseek-v4-pro",
+  model: "deepseek-v4-flash",
   apiKey: "",
   proxyUrl: "",
   thinking: true
@@ -352,7 +352,7 @@ function bindSettings() {
   provider.addEventListener("change", () => {
     if (provider.value === "deepseek") {
       baseUrl.value = "https://api.deepseek.com";
-      model.value = "deepseek-v4-pro";
+      model.value = "deepseek-v4-flash";
     }
   });
 

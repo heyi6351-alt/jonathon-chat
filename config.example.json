@@ -1,7 +1,7 @@
 {
   "provider": "deepseek",
   "baseUrl": "https://api.deepseek.com",
-  "model": "deepseek-v4-pro",
+  "model": "deepseek-v4-flash",
   "proxyUrl": "https://your-worker.workers.dev",
   "thinking": true
 }
