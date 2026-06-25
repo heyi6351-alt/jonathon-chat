@@ -471,11 +471,9 @@ function bindSettings() {
   });
 
   clear.addEventListener("click", () => {
-    if (!confirm("清空本地对话和长期记忆？")) return;
+    if (!confirm("清空聊天记录？长期记忆会保留。")) return;
     state.messages = [];
-    state.memory = "- 用户正在用手机/网页和 Jonathon skill 对话。\n";
     localStorage.removeItem(STORE.messages);
-    localStorage.setItem(STORE.memory, state.memory);
     render();
     settingsDialog.close();
   });
