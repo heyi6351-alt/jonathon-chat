@@ -154,12 +154,12 @@ h1 {
 }
 
 .user-avatar {
-  background: linear-gradient(135deg, #576b95, #7b8db3);
+  background: #000;
   color: #fff;
   display: grid;
   place-items: center;
-  font-size: 14px;
-  font-weight: 700;
+  font-size: 20px;
+  font-weight: 600;
 }
 
 .bubble {

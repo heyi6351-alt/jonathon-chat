@@ -148,7 +148,7 @@ async function respond(userText) {
     mergeMemory(result.memory_updates);
   } catch (error) {
     console.error(error);
-    addMessage("assistant", fallbackReply(userText), "模型连接失败，使用本地规则兜底。");
+    addMessage("assistant", connectionErrorReply(error), "模型连接失败，没有生成 Jonathon 回复。");
   } finally {
     sendButton.disabled = false;
     updateStatus();
@@ -233,9 +233,13 @@ async function callModel(userText, plan) {
     headers,
     body: JSON.stringify(body)
   });
-  if (!response.ok) throw new Error(`API ${response.status}`);
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`API ${response.status}: ${errorText.slice(0, 180)}`);
+  }
   const data = await response.json();
   const content = data.choices?.[0]?.message?.content || "";
+  if (!content) throw new Error("API returned no message content");
   return parseModelJson(content);
 }
 
@@ -405,8 +409,13 @@ function imageAvatar() {
 function userAvatar() {
   const div = document.createElement("div");
   div.className = "bubble-avatar user-avatar";
-  div.textContent = "叔";
+  div.textContent = "1";
   return div;
+}
+
+function connectionErrorReply(error) {
+  const message = String(error?.message || error || "未知错误");
+  return `模型没连上，不是 Jonathon 的回复。\n${message}`;
 }
 
 function bindSettings() {
