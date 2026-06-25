@@ -7,22 +7,22 @@
 1. 把 `jonathon-chat/` 目录上传到一个 GitHub 仓库。
 2. 在 GitHub 仓库设置里开启 Pages，目录选 `main / root`。
 3. 用手机打开 Pages 地址。
-4. 点左上角设置，填入 DeepSeek API Key。
+4. 默认会读取 `config.json` 里的 Cloudflare Worker Proxy URL；不需要在手机里填 DeepSeek API Key。
 
 默认 DeepSeek 设置：
 
 - Base URL: `https://api.deepseek.com`
-- Model: `deepseek-v4-flash`
+- Model: `deepseek-chat`
 
-DeepSeek 官方文档说明其 API 兼容 OpenAI 格式，base_url 为 `https://api.deepseek.com`，示例模型包括 `deepseek-v4-flash` 和 `deepseek-v4-pro`。本项目默认使用更轻的 `deepseek-v4-flash`。
+DeepSeek API 兼容 OpenAI 格式，base_url 为 `https://api.deepseek.com`。本项目默认使用 `deepseek-chat`。
 
 ## 推荐：用 Cloudflare Worker 代理
 
 部分模型 API 不允许浏览器跨域请求。更安全的方式是部署 `worker.js`：
 
-1. 在 Cloudflare Workers 新建 Worker。
-2. 粘贴 `worker.js`。
-3. 设置环境变量 `DEEPSEEK_API_KEY`。
+1. 登录 Cloudflare Wrangler：`npx wrangler login`
+2. 设置 secret：`npx wrangler secret put DEEPSEEK_API_KEY`
+3. 部署 Worker：`npx wrangler deploy`
 4. 发布后，把 Worker URL 填到网页的 Proxy URL。
 
 这样 API Key 不需要放在手机浏览器里。

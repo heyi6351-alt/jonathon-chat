@@ -1,0 +1,8 @@
+name = "jonathon-chat-proxy"
+main = "worker.js"
+compatibility_date = "2026-06-25"
+workers_dev = true
+preview_urls = false
+
+[vars]
+DEEPSEEK_BASE_URL = "https://api.deepseek.com/chat/completions"
