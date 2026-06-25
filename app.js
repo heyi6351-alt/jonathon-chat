@@ -44,7 +44,7 @@ const SKILL = {
 
 const STORE = {
   settings: "jonathon.settings",
-  messages: "jonathon.messages",
+  messages: "jonathon.messages.v2",
   memory: "jonathon.longMemory",
   showPlan: "jonathon.showPlan"
 };
@@ -78,6 +78,7 @@ boot();
 
 async function boot() {
   await loadPublicConfig();
+  clearLegacyChatRecords();
   ensureProxyDefault();
   bindSettings();
   bindMemoryPanel();
@@ -90,6 +91,10 @@ async function boot() {
   if (!state.settings.apiKey && !state.settings.proxyUrl) {
     setTimeout(() => document.querySelector("#settingsButton")?.click(), 300);
   }
+}
+
+function clearLegacyChatRecords() {
+  localStorage.removeItem("jonathon.messages");
 }
 
 function ensureProxyDefault() {
