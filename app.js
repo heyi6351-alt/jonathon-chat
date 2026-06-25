@@ -52,7 +52,7 @@ const STORE = {
 const defaults = {
   provider: "deepseek",
   baseUrl: "https://api.deepseek.com",
-  model: "deepseek-v4-flash",
+  model: "deepseek-chat",
   apiKey: "",
   proxyUrl: "",
   thinking: true
@@ -85,6 +85,9 @@ async function boot() {
   updateStatus();
   if (state.messages.length === 0) {
     addMessage("assistant", "晚上好！\n今天想聊什么？", "欢迎");
+  }
+  if (!state.settings.apiKey && !state.settings.proxyUrl) {
+    setTimeout(() => document.querySelector("#settingsButton")?.click(), 300);
   }
 }
 
@@ -410,20 +413,26 @@ function bindSettings() {
   const save = document.querySelector("#saveSettingsButton");
   const clear = document.querySelector("#clearButton");
 
-  button.addEventListener("click", () => {
+  button.addEventListener("click", openSettingsDialog);
+
+  function fillSettingsForm() {
     provider.value = state.settings.provider;
     baseUrl.value = state.settings.baseUrl;
     model.value = state.settings.model;
     apiKey.value = state.settings.apiKey;
     proxyUrl.value = state.settings.proxyUrl;
     thinking.checked = state.settings.thinking;
+  }
+
+  function openSettingsDialog() {
+    fillSettingsForm();
     settingsDialog.showModal();
-  });
+  }
 
   provider.addEventListener("change", () => {
     if (provider.value === "deepseek") {
       baseUrl.value = "https://api.deepseek.com";
-      model.value = "deepseek-v4-flash";
+      model.value = "deepseek-chat";
     }
   });
 

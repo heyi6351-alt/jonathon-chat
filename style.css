@@ -93,8 +93,16 @@ h1 {
   background: transparent;
   color: #111;
   height: 44px;
+  min-width: 44px;
+  padding: 0 8px;
   display: grid;
   place-items: center;
+}
+
+.text-icon {
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 600;
 }
 
 .back-icon {
