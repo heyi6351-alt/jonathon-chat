@@ -10,26 +10,26 @@
     <main class="phone-shell">
       <header class="chat-header">
         <button id="settingsButton" class="icon-button" title="设置" aria-label="设置">
-          <span class="icon">⚙</span>
+          <span class="icon back-icon">‹</span>
         </button>
         <div class="contact">
-          <img src="./assets/jonathon-avatar.svg" alt="" class="avatar" />
           <div>
             <h1>Jonathon skill</h1>
             <p id="statusLine">本地记忆 · 未连接模型</p>
           </div>
         </div>
         <button id="memoryButton" class="icon-button" title="记忆" aria-label="记忆">
-          <span class="icon">⌁</span>
+          <span class="icon more-icon">⋯</span>
         </button>
       </header>
 
       <section id="chatLog" class="chat-log" aria-live="polite"></section>
 
       <form id="composer" class="composer">
-        <button type="button" id="planToggle" class="tool-button" title="显示思考摘要">思考</button>
+        <button type="button" id="planToggle" class="round-tool" title="显示思考摘要" aria-label="显示思考">⌁</button>
         <textarea id="messageInput" rows="1" placeholder="发消息给 Jonathon..." autocomplete="off"></textarea>
         <button id="sendButton" class="send-button" type="submit">发送</button>
+        <button type="button" class="round-tool plus-tool" title="更多" aria-label="更多">＋</button>
       </form>
     </main>
 

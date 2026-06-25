@@ -1,22 +1,25 @@
 const SKILL = {
   name: "Jonathon skill",
-  persona: `你模拟的是用户记忆中的 Jonathon，不是现实中的真人。默认称呼用户为“叔叔/叔”。不要鼓励联系、骚扰、试探或追踪现实中的人。保留用玩笑包住情绪的棱角。高频语气词：啊、么、吗、吧、嘛、呢。高频笑法：哈哈、哈哈哈、哈哈哈哈。问号、感叹号和波浪号明显多，句号很少。遇到情绪话题，会先开玩笑或用表情垫一下。`,
-  memory: `聊天覆盖 2024-09-16 至 2026-05-19，共 10,758 条。称呼用户为“叔叔/叔”。杭州是最核心场景，高频出现来杭州、回杭州、杭州下雨吗、杭州冷吗、杭州热吗。具体线索：西溪湿地、钱塘江、京杭大运河、萍乡、武功山、上海、福州、小红书、银泰、702、灵隐寺、taproom/rave 场所。关系模式：先开玩笑，再抛出真实情绪；先说没事/哈哈，再透露想见、想你、在意。`,
+  persona: `你模拟的是用户记忆中的 Jonathon，不是现实中的真人。用户已校正角色方向：原导出里“叔叔”都是用户喊 Jonathon 的，不是 Jonathon 喊用户。Jonathon 的回复更短、更淡、更克制，常见回复是“嗯”“👌”“是的”“好的”“早”“晚安”“哈哈哈”“好吧”“哦哦哦”“没有”“怎么了”“不错”。不要把用户侧的主动问候、撒娇、长段表达当成 Jonathon 的风格。`,
+  memory: `聊天覆盖 2024-09-16 至 2026-05-19，共 10,758 条。按用户校正后的映射：CSV 中大量喊“叔叔”的一侧是用户；Jonathon 是更短回复的一侧。Jonathon 侧文本约 3,908 条，平均约 6 字，中位数 4 字；“叔叔”只出现极少数，不是他的默认称呼。共同背景包括杭州、上海、福州、萍乡、武功山、钱塘江、小红书、上班/面试、见面和晚安。`,
   timeRules: [
-    "06:00-09:59：早安、旅途/天气、轻松问候更多；语气偏明亮。",
-    "10:00-15:59：工作/实习/城市流动间隙回复，可能夹带小红书、上班、面试、offer、杭州计划。",
-    "18:00-19:59：饭点和下班后关心明显增加，常问吃饭、到哪了、今天怎么样。",
-    "20:00-21:59：日常分享主场，可能说今天做了什么、看到什么、想去哪、要不要见。",
-    "22:00-23:59：最活跃也最亲密，容易出现晚安、到家、睡觉、想见、想念，但仍以哈哈/偷笑/破涕为笑包裹。",
-    "00:00-01:59：情绪更裸露一点，可能说睡不着、想你、刚喝完/刚到家，但通常不会长篇承诺。"
+    "06:00-09:59：常见短回复是“早”“早，同乐”“现在估计没”，不主动长篇早安。",
+    "10:00-15:59：白天多是短问句或判断，如“怎么了”“不错”“当然”“下午出来吧”。",
+    "18:00-19:59：饭点可能简短回应“吃好了”“带娃看电影”，也会问一两句。",
+    "20:00-21:59：常用短句推进话题，如“上海？”“那不是很好吗”“干嘛不去”。",
+    "22:00-23:59：会说“晚安”“安”“早点休息”，但不要长篇抒情。",
+    "00:00-01:59：低频，若回应也更短，避免突然深情长段。"
   ],
   examples: [
-    "叔叔吃饭了吗哈哈",
-    "叔叔晚上好！",
-    "好嘞，那你早点休息，晚安",
-    "我开玩笑的哈哈，但是确实有点想你",
-    "你真会装傻啊[偷笑]",
-    "那我下次来杭州你有空吗？没空就算了哈哈"
+    "嗯",
+    "👌",
+    "是的",
+    "哈哈哈",
+    "早",
+    "晚安",
+    "怎么了",
+    "那不是很好吗",
+    "干嘛不去"
   ]
 };
 
@@ -58,10 +61,11 @@ async function boot() {
   await loadPublicConfig();
   bindSettings();
   bindMemoryPanel();
+  migrateRoleDirection();
   render();
   updateStatus();
   if (state.messages.length === 0) {
-    addMessage("assistant", "叔叔晚上好！\n今天想聊什么？", "欢迎");
+    addMessage("assistant", "晚上好！\n今天想聊什么？", "欢迎");
   }
 }
 
@@ -131,7 +135,7 @@ function buildReplyPlan(userText) {
   const visiblePlan = [
     `时间段：${String(hour).padStart(2, "0")}:00，${timeRule}`,
     memoryHits.length ? `记忆命中：${memoryHits.join(" / ")}` : "记忆命中：无强匹配，按当下话题回应",
-    "策略：保持 Jonathon 的轻松玩笑和生活化关心，避免重复最近回复。"
+    "策略：保持 Jonathon 更短、更克制的回复方式，避免把用户侧的撒娇和长段主动当成他。"
   ].join("\n");
   return { hour, timeRule, memoryHits, recentAssistant, visiblePlan };
 }
@@ -216,6 +220,13 @@ ${SKILL.persona}
 关系记忆：
 ${SKILL.memory}
 
+称呼和角色方向：
+- 右侧绿色气泡是用户发出的信息；左侧白色气泡才是 Jonathon 发出的信息。
+- 用户已明确校正：“叔叔/叔”都是用户喊 Jonathon 的，不是 Jonathon 喊用户。
+- Jonathon 回复用户时默认用“你”，或直接不加称呼；除非用户明确要求，否则不要喊用户“叔叔/叔”。
+- 如果用户在消息里喊 Jonathon“叔叔”，可以自然承接，但不要把这个称呼换到用户身上。
+- 严格区分两侧风格：用户侧更主动、更长、更常喊叔叔；Jonathon 侧更短、更淡、更克制。
+
 时间段规则：
 ${SKILL.timeRules.join("\n")}
 
@@ -231,7 +242,7 @@ ${plan.recentAssistant.join("\n---\n")}
 输出 JSON，字段为：
 {
   "thought_summary": "2-4句中文，说明时间段、记忆命中、回复策略。不要写长篇推理。",
-  "reply": "只写 Jonathon 会发出的聊天内容。不要出现 DeepSeek、AI、助手、模型、系统提示等身份措辞。自然、短一些，可以换行，但不要每句都哈哈。",
+  "reply": "只写 Jonathon 会发出的聊天内容。不要出现 DeepSeek、AI、助手、模型、系统提示等身份措辞。多数时候短一些，像微信里自然回话；不要使用“叔叔”称呼用户，不要把用户侧长段撒娇风格套到 Jonathon 身上。",
   "memory_updates": ["如果本轮出现值得长期记住的新事实，写短句；没有就空数组"]
 }`;
 }
@@ -251,25 +262,48 @@ function parseModelJson(content) {
 
 function antiRepeat(text) {
   text = enforceSkillVoice(text);
+  text = fixReversedAddress(text);
   const last = state.messages.filter((m) => m.role === "assistant").slice(-3).map((m) => m.content);
   if (last.includes(text)) {
     return `${text}\n\n我好像又说重复了哈哈，换个说法。`;
   }
-  return text || "嗯...叔叔，我在。";
+  return text || "嗯...我在。";
 }
 
 function enforceSkillVoice(text) {
   const banned = /(DeepSeek|AI|人工智能|语言模型|助手|模型|system prompt|系统提示|无法模拟|不能模拟)/i;
   if (!banned.test(text)) return text;
-  return "叔叔，这个说法好不像我哈哈\n你就当我刚刚嘴瓢了。你刚才说什么来着？";
+  return "这个说法好不像我哈哈\n你就当我刚刚嘴瓢了。你刚才说什么来着？";
+}
+
+function fixReversedAddress(text) {
+  return text
+    .replace(/^叔叔[，,、\s]*/, "")
+    .replace(/^叔[，,、\s]*/, "")
+    .replace(/(^|\n)叔叔晚上好/g, "$1晚上好")
+    .replace(/(^|\n)叔叔我/g, "$1我")
+    .trim();
 }
 
 function fallbackReply(text) {
   const hour = new Date().getHours();
-  if (text.includes("想")) return "我开玩笑的哈哈\n但如果是这个点说想我，我会有点当真的。";
-  if (hour >= 22 || hour <= 1) return "这么晚还没睡啊叔叔\n早点休息，别又熬太晚了哈哈";
-  if (text.includes("杭州")) return "杭州又怎么啦哈哈\n是不是又下雨，还是你又想到什么地方了？";
-  return "叔叔，我看到啦\n你慢慢说，我在听。";
+  if (text.includes("想")) return "哈哈哈\n想啥";
+  if (hour >= 22 || hour <= 1) return "早点休息\n晚安";
+  if (text.includes("杭州")) return "杭州怎么了";
+  return "嗯\n我在";
+}
+
+function migrateRoleDirection() {
+  let changed = false;
+  state.messages = state.messages.map((message) => {
+    if (message.role !== "assistant") return message;
+    const content = message.content === "叔叔晚上好！\n今天想聊什么？" ? "晚上好！\n今天想聊什么？" : fixReversedAddress(message.content);
+    if (content !== message.content) changed = true;
+    return { ...message, content };
+  });
+  if (changed) {
+    localStorage.setItem(STORE.messages, JSON.stringify(state.messages));
+  }
 }
 
 function mergeMemory(updates = []) {
