@@ -163,17 +163,35 @@ async function respond(userText) {
 }
 
 function buildReplyPlan(userText) {
-  const now = new Date();
-  const hour = now.getHours();
+  const chinaTime = getChinaTimeParts();
+  const hour = chinaTime.hour;
   const timeRule = getTimeRule(hour);
   const recentAssistant = state.messages.filter((m) => m.role === "assistant").slice(-5).map((m) => m.content);
   const memoryHits = retrieveMemory(userText);
   const visiblePlan = [
-    `时间段：${String(hour).padStart(2, "0")}:00，${timeRule}`,
+    `北京时间：${chinaTime.label}，${timeRule}`,
     memoryHits.length ? `记忆命中：${memoryHits.join(" / ")}` : "记忆命中：无强匹配，按当下话题回应",
     "策略：优先模仿最近 2000 条里的 Jonathon 短回方式，避免把用户侧的撒娇和长段主动当成他。"
   ].join("\n");
-  return { hour, timeRule, memoryHits, recentAssistant, visiblePlan };
+  return { hour, chinaTime, timeRule, memoryHits, recentAssistant, visiblePlan };
+}
+
+function getChinaTimeParts() {
+  const parts = new Intl.DateTimeFormat("zh-CN", {
+    timeZone: "Asia/Shanghai",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    hourCycle: "h23"
+  }).formatToParts(new Date());
+  const values = Object.fromEntries(parts.map((part) => [part.type, part.value]));
+  const hour = Number(values.hour || 0);
+  return {
+    hour,
+    label: `${values.year}-${values.month}-${values.day} ${values.hour}:${values.minute}`
+  };
 }
 
 function getTimeRule(hour) {
@@ -296,6 +314,8 @@ ${state.memory}
 
 本轮回复计划：
 ${plan.visiblePlan}
+
+当前时间必须按北京时间/中国时间理解，不按服务器时区或美国时区理解。
 
 最近 Jonathon 回复，避免重复：
 ${plan.recentAssistant.join("\n---\n")}
