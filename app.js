@@ -64,7 +64,7 @@ const state = {
   settings: loadJson(STORE.settings, defaults),
   messages: loadJson(STORE.messages, []),
   memory: localStorage.getItem(STORE.memory) || "- 用户正在用手机/网页和 Jonathon skill 对话。\n",
-  showPlan: localStorage.getItem(STORE.showPlan) === "true"
+  showPlan: true
 };
 
 const chatLog = document.querySelector("#chatLog");
@@ -81,6 +81,7 @@ boot();
 async function boot() {
   await loadPublicConfig();
   clearLegacyChatRecords();
+  enableDefaultThoughtState();
   ensureProxyDefault();
   ensureStableModelSettings();
   removeErrorMessagesFromHistory();
@@ -99,6 +100,11 @@ async function boot() {
 
 function clearLegacyChatRecords() {
   localStorage.removeItem("jonathon.messages");
+}
+
+function enableDefaultThoughtState() {
+  localStorage.setItem(STORE.showPlan, "true");
+  state.showPlan = true;
 }
 
 function ensureProxyDefault() {
@@ -474,11 +480,10 @@ function render() {
 }
 
 function imageAvatar() {
-  const img = document.createElement("img");
-  img.className = "bubble-avatar";
-  img.src = "./assets/jonathon-avatar.svg";
-  img.alt = "";
-  return img;
+  const div = document.createElement("div");
+  div.className = "bubble-avatar assistant-avatar";
+  div.textContent = "0";
+  return div;
 }
 
 function userAvatar() {
