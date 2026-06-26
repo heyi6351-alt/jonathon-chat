@@ -466,10 +466,22 @@ function antiRepeat(text) {
   text = fixReversedAddress(text);
   const last = state.messages.filter((m) => m.role === "assistant").slice(-3).map((m) => m.content);
   if (last.includes(text)) {
-    return `${text}\n\n我好像又说重复了哈哈，换个说法。`;
+    return repeatFallback(text);
   }
   if (!text) throw new Error("Model returned empty reply");
   return text;
+}
+
+function repeatFallback(text) {
+  const compact = String(text || "").trim();
+  if (/^早[啊呀嘛吗呢。！!]*$/.test(compact)) return "嗯早";
+  if (/^嗯+$/.test(compact)) return "怎么了";
+  if (/^好的?$/.test(compact)) return "行";
+  if (/^是的?$/.test(compact)) return "差不多";
+  if (/^哈哈哈*$/.test(compact)) return "笑死";
+  if (/在上班|上班/.test(compact)) return "摸会儿鱼";
+  if (/吃了|吃过/.test(compact)) return "吃了";
+  return compact;
 }
 
 function enforceSkillVoice(text) {
