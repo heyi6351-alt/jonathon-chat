@@ -550,18 +550,32 @@ function render() {
 }
 
 function imageAvatar() {
-  const div = document.createElement("div");
-  div.className = "bubble-avatar assistant-avatar";
-  div.setAttribute("aria-label", "Jonathon avatar 0");
-  div.textContent = "0";
-  return div;
+  return numberAvatar("assistant-avatar", "0", "Jonathon avatar 0");
 }
 
 function userAvatar() {
+  return numberAvatar("user-avatar", "1", "User avatar 1");
+}
+
+function numberAvatar(className, value, label) {
   const div = document.createElement("div");
-  div.className = "bubble-avatar user-avatar";
-  div.setAttribute("aria-label", "User avatar 1");
-  div.textContent = "1";
+  div.className = `bubble-avatar ${className}`;
+  div.setAttribute("aria-label", label);
+  div.style.cssText = [
+    "width:38px",
+    "height:38px",
+    "border-radius:6px",
+    "flex:0 0 auto",
+    "display:grid",
+    "place-items:center",
+    "background:#000",
+    "color:#fff",
+    "font-size:20px",
+    "font-weight:600",
+    "line-height:1",
+    "background-image:none"
+  ].join(";");
+  div.textContent = value;
   return div;
 }
 
