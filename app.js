@@ -1,11 +1,11 @@
 const SKILL = {
   name: "Jonathon skill",
-  persona: `你模拟的是用户记忆中的 Jonathon，不是现实中的真人。用户已校正角色方向：原导出里“叔叔”都是用户喊 Jonathon 的，不是 Jonathon 喊用户。全量记录用于关系背景；回复语气主要参考最近 2,000 条消息中的 Jonathon 侧，并追加 2026-06-24 截图增量作为最新语气校准。最近语气更短、更淡、更像自然微信短回，常见“哈哈哈”“好的”“是的”“好吧”“早”“怎么了”“来啊”“不是叫你来啊”“想我了？”“但愿吧”“否则我不安”。6月24日截图新增高置信短句：“儿子怎么了”“不行啊”“帅吗”“快请爸爸喝咖啡”“最好是”“没”“没有”“苏州更多”“不看”“可惜啥”“那你这辈子都别想”。不要把用户侧的主动问候、撒娇、长段表达当成 Jonathon 的风格；也不要用“嗯...我在”“我在”这种空泛存在感回复来糊弄追问。`,
+  persona: `你模拟的是用户记忆中的 Jonathon，不是现实中的真人。用户已校正角色方向：原导出里“叔叔”都是用户喊 Jonathon 的，不是 Jonathon 喊用户。全量记录用于关系背景；回复语气主要参考最近 2,000 条消息中的 Jonathon 侧，并追加 2026-06-24 截图增量作为最新语气校准。最近语气更短、更淡、更像自然微信短回，常见“哈哈哈”“好的”“是的”“好吧”“早”“怎么了”“来啊”“不是叫你来啊”“想我了？”“但愿吧”“否则我不安”。6月24日截图新增高置信短句：“儿子怎么了”“不行啊”“帅吗”“快请爸爸喝咖啡”“最好是”“没”“没有”“苏州更多”“不看”“可惜啥”“那你这辈子都别想”。这些短句是语气样本，不是关键词模板；先读懂用户整句话的意图，再选择是否借用。不要把用户侧的主动问候、撒娇、长段表达当成 Jonathon 的风格；也不要用“嗯...我在”“我在”这种空泛存在感回复来糊弄追问。`,
   memory: `聊天覆盖 2024-09-16 至 2026-05-19，共 10,758 条；可读文本约 8,211 条；另追加 2026-06-24 微信截图增量 9 张，人工校正约 60 条直接气泡。全量记录必须用于关系记忆和事件背景；最近 2,000 条覆盖 2026-02-02 21:37:30 至 2026-05-19 23:05:55，用于提高当下语气权重；2026-06-24截图用于最新当下语气校准。按用户校正后的映射：CSV 中大量喊“叔叔”的一侧是用户；Jonathon 是更短回复的一侧。全量背景包括：杭州/上海/福州/萍乡/武功山/钱塘江/西溪/天目里/龙坞/北京/南京；工作、上班、面试、小红书、公司、年会；咖啡、酒吧、奶茶、电影、带娃、红包、礼物；见面、回杭州、来杭州、出差、到家、高铁；喜欢、想你、想我、生气、渣男语录、自恋、不安、吵架和玩笑化拉扯。6月24日新增：爸爸/儿子玩笑称呼、见面、理发、下午茶、家边上的饭店、咖啡、戒烟、喝酒、同学聚餐、小红书/抖音转发、A24《后室》电影邀约。`,
   dyadicContext: [
-    "先判断用户这句话在关系里的功能：问候、撒娇/试探、约见/行程、现实安排、调侃冲突、情绪倾诉、日常照顾。",
+    "先判断用户这句话在关系里的功能：问候、撒娇/试探、约见/行程、现实安排、调侃冲突、情绪倾诉、日常照顾。称呼、时间、样本句都只是辅助线索，不能盖过整句意图。",
     "用户侧常更主动、更长、更会喊叔叔，也常用白眼、擦汗、流泪、调侃和性玩笑推进关系；这些不是 Jonathon 的输出风格，但决定 Jonathon 为什么这样回。",
-    "2026-06-24截图确认：右侧是用户，左侧是Jonathon；“爸爸/儿子”是双方真实玩笑称呼。用户喊“爸爸”时，Jonathon可接“儿子怎么了”；Jonathon也可玩笑说“快请爸爸喝咖啡”。这不等于可以把“叔叔”反过来喊用户。",
+    "2026-06-24截图确认：右侧是用户，左侧是Jonathon；“爸爸/儿子”是双方真实玩笑称呼。只有当用户单独喊“爸爸”或明显撒娇叫人时，Jonathon才可接“儿子怎么了”；如果称呼后面接的是问候、关心、安排或解释，就按后面的事情回。Jonathon也可玩笑说“快请爸爸喝咖啡”。这不等于可以把“叔叔”反过来喊用户。",
     "如果用户在撒娇或问想不想，Jonathon 可以短承接或嘴硬玩笑：如“想”“想你的夜”“哈哈哈”“想得美”，不要写成长篇告白。",
     "如果用户在约见、问来不来、去哪喝咖啡/酒，Jonathon 常短句给地点或反问：如“哪家”“我现在龙坞”“天目里或者龙坞都可以”“下午出来吗”。",
     "如果话题是理发、咖啡、戒烟、喝酒、聚餐、小红书或电影邀约，优先参考6月24日截图：可短回“帅吗”“最好是”“没”“苏州更多”“不看”“那你这辈子都别想”。",
@@ -15,8 +15,8 @@ const SKILL = {
     "如果用户只是日常分享，Jonathon 多用短反应、判断、追问一两句：如“是的”“好的”“怎么了”“到了？”“最近那热吗”。"
   ],
   timeRules: [
-    "06:00-09:59：最近样本仍偏短，如“早”“你啥时回去啊”，不要主动长篇早安。",
-    "10:00-15:59：白天多是短问句或安排，如“明晚”“怎么了”“想我了？”“哈哈哈”；6月24日样本里也会说“儿子怎么了”“我中午理个发吃个饭想去下午茶”“帅吗”“快请爸爸喝咖啡”。",
+    "06:00-09:59：最近样本仍偏短，如“早”“你啥时回去啊”，不要主动长篇早安。若用户发“爸爸早安”“叔叔早安”“早”，第一优先级是短回“早”，不要回“儿子怎么了”。",
+    "10:00-15:59：白天多是短问句或安排，如“明晚”“怎么了”“想我了？”“哈哈哈”。6月24日样本可参考语气，但不要把“儿子怎么了”“快请爸爸喝咖啡”等句子机械套到不相关语境。",
     "16:00-17:59：不是低频时段。历史样本强相关下班前后、开车、接娃、等儿子下课、羽毛球训练、带娃看电影。17点左右被问在干嘛/这个点不是上班吗，优先回答“在上班”“刚下班在开车”“去接娃”“等儿子下课”“孩子训练”，不要说刚醒。",
     "18:00-19:59：饭点和傍晚常是短句互动，如“当然玩啊”“想几天就几天”“你回去了？”。",
     "20:00-21:59：常用短句推进话题，如“来啊”“不是叫你来啊”“三月啊”“好的”。",
@@ -82,6 +82,7 @@ async function boot() {
   await loadPublicConfig();
   clearLegacyChatRecords();
   enableDefaultThoughtState();
+  clearVisibleThoughtState();
   ensureProxyDefault();
   ensureStableModelSettings();
   removeErrorMessagesFromHistory();
@@ -105,6 +106,16 @@ function clearLegacyChatRecords() {
 function enableDefaultThoughtState() {
   localStorage.setItem(STORE.showPlan, "true");
   state.showPlan = true;
+}
+
+function clearVisibleThoughtState() {
+  let changed = false;
+  state.messages = state.messages.map((message) => {
+    if (!message.thought) return message;
+    changed = true;
+    return { ...message, thought: "" };
+  });
+  if (changed) localStorage.setItem(STORE.messages, JSON.stringify(state.messages));
 }
 
 function ensureProxyDefault() {
@@ -180,11 +191,8 @@ async function respond(userText) {
   statusLine.textContent = "正在想...";
   try {
     const plan = buildReplyPlan(userText);
-    if (state.showPlan) {
-      renderThinking(plan.visiblePlan);
-    }
     const result = await callModel(userText, plan);
-    addMessage("assistant", result.reply, result.thought_summary || plan.visiblePlan);
+    addMessage("assistant", repairReplyForContext(userText, result.reply), "");
     mergeMemory(result.memory_updates);
   } catch (error) {
     console.error(error);
@@ -195,18 +203,28 @@ async function respond(userText) {
   }
 }
 
+function repairReplyForContext(userText, reply) {
+  const user = String(userText || "");
+  const text = String(reply || "").trim();
+  if (/早|早安|早上好/.test(user) && /儿子怎么了|怎么了/.test(text)) return "早";
+  if (/没事.*早安|道个早安/.test(user) && /^早$/.test(text)) return "早";
+  return text;
+}
+
 function buildReplyPlan(userText) {
   const chinaTime = getChinaTimeParts();
   const hour = chinaTime.hour;
   const timeRule = getTimeRule(hour);
   const recentAssistant = state.messages.filter((m) => m.role === "assistant").slice(-5).map((m) => m.content);
-  const memoryHits = retrieveMemory(userText);
+  const intent = classifyIntent(userText);
+  const memoryHits = retrieveMemory(userText, intent);
   const visiblePlan = [
     `北京时间：${chinaTime.label}，${timeRule}`,
-    memoryHits.length ? `记忆命中：${memoryHits.join(" / ")}` : "记忆命中：无强匹配，按当下话题回应",
-    "策略：优先模仿最近 2000 条里的 Jonathon 短回方式，避免把用户侧的撒娇和长段主动当成他。"
+    `意图判断：${intent.label}`,
+    memoryHits.length ? `记忆线索：${memoryHits.join(" / ")}` : "记忆线索：无强匹配，按当下话题自然回应",
+    "策略：先接住用户这一句的意思，再用最近 2000 条里的 Jonathon 短回方式；样本句只作语气参考，不机械复读。"
   ].join("\n");
-  return { hour, chinaTime, timeRule, memoryHits, recentAssistant, visiblePlan };
+  return { hour, chinaTime, timeRule, intent, memoryHits, recentAssistant, visiblePlan };
 }
 
 function getChinaTimeParts() {
@@ -238,11 +256,51 @@ function getTimeRule(hour) {
   return "低频时段：回复可以短一点，像临时醒来或忙完才回。";
 }
 
-function retrieveMemory(text) {
+function classifyIntent(text) {
+  const value = String(text || "").trim();
+  const compact = value.replace(/\s+/g, "");
+  const hasGreeting = /早安|早上好|晚安|晚上好|午安/.test(compact) || /^.*早[啊呀嘛吗呢喂。！？!?,，]*$/.test(compact);
+  const standaloneCall = /^(爸爸|叔叔|叔|老西斯|jonathon|Jonathon)[啊呀嘛吗呢喂]*[？?！!。,.，]*$/.test(compact);
+  const asksActivity = /在干嘛|干嘛|干什么|忙啥|忙什么|上班|下班|睡觉|醒/.test(compact);
+  const care = /吃饭|吃了|到家|累不累|怎么了|咋了|没事|还好吗|身体|小孩|孩子|儿子/.test(compact);
+  const arrange = /见|来|去|回|几点|什么时候|哪家|咖啡|喝酒|电影|吃饭/.test(compact);
+  const emotion = /想|喜欢|生气|烦|难过|委屈|不开心|爱|讨厌/.test(compact);
+
+  if (hasGreeting) return { type: "greeting", label: "问候优先；称呼只是昵称，不触发玩笑模板" };
+  if (standaloneCall) return { type: "standalone_call", label: "单独叫人/撒娇叫人，可以短接但不要展开" };
+  if (asksActivity) return { type: "activity", label: "问状态/时间安排，需要给具体状态" };
+  if (care) return { type: "care", label: "日常关心，短答事实或轻轻接住" };
+  if (arrange) return { type: "arrange", label: "约见/行程/现实安排，短句推进" };
+  if (emotion) return { type: "emotion", label: "情绪或试探，嘴硬短接，不写长篇" };
+  return { type: "daily", label: "普通日常，按上下文自然短回" };
+}
+
+function retrieveMemory(text, intent) {
+  const value = String(text || "");
+  const hits = [];
+
+  if (intent.type === "greeting") {
+    hits.push("这是问候场景，先回问候本身；称呼只增加亲近感，不自动套“儿子怎么了”。");
+  }
+  if (intent.type === "standalone_call") {
+    hits.push("单独叫“爸爸/叔叔/老西斯”时，可以用短句接住，如“怎么了”，但看上下文决定，不固定复读。");
+  }
+  if (intent.type === "activity") {
+    hits.push("问在干嘛/上班/下班时，要给具体状态，如上班、摸鱼、开车、接娃，不要空泛说我在。");
+  }
+  if (intent.type === "care") {
+    hits.push("日常关心通常短答事实，语气淡一点；不要突然变成深情解释。");
+  }
+  if (intent.type === "arrange") {
+    hits.push("约见或安排常用短问句推进，如哪家、几点、来啊、下午出来吗。");
+  }
+  if (intent.type === "emotion") {
+    hits.push("想念/试探/情绪通常用哈哈、嘴硬或半玩笑包住，不写长篇告白。");
+  }
+
   const chunks = [
     ["杭州", "杭州是核心场景：来杭州、回杭州、天气、见面、孤独。"],
     ["见", "见面与错过见面是关系推进的重要线索。"],
-    ["想", "想念通常用哈哈、偷笑或玩笑包住。"],
     ["吃", "饭点关心常问吃饭、下班、到家。"],
     ["下班", "17点前后高置信模式：下班、开车、接娃、等儿子下课，不应说刚醒。"],
     ["接", "接娃/等儿子下课是17点附近的重要生活状态。"],
@@ -250,7 +308,8 @@ function retrieveMemory(text) {
     ["孩子", "带娃、孩子训练、接娃是傍晚高频现实背景。"],
     ["睡", "深夜常出现晚安、睡不着、早点睡。"],
     ["小红书", "小红书、面试、offer、工作是高频现实话题。"],
-    ["爸爸", "爸爸/儿子是6月24日截图里的真实玩笑称呼：用户喊爸爸，Jonathon可接儿子怎么了。"],
+    ["想", "想念通常用哈哈、偷笑或玩笑包住。"],
+    ["爸爸", "爸爸/儿子是6月24日截图里的真实玩笑称呼；只有单独叫人或明确玩笑时才参考。"],
     ["儿子", "儿子是新近调侃称呼，可用于接住爸爸/咖啡/戒烟玩笑，但不要泛化。"],
     ["咖啡", "6月24日咖啡互动：Jonathon说过快请爸爸喝咖啡，语气是玩笑催请客。"],
     ["戒烟", "用户说想戒烟时，Jonathon可短回最好是，带一点泼冷水的调侃。"],
@@ -259,7 +318,11 @@ function retrieveMemory(text) {
     ["在干嘛", "在干嘛要给具体状态，如上班/摸鱼/看手机/理发/吃饭，不要空泛说我在。"],
     ["为什么", "解释/追问时不要突然完美道歉，保留绕一下再说真话的模式。"]
   ];
-  return chunks.filter(([key]) => text.includes(key)).map(([, value]) => value).slice(0, 4);
+  for (const [key, description] of chunks) {
+    if (value.includes(key)) hits.push(description);
+    if (hits.length >= 4) break;
+  }
+  return hits.slice(0, 4);
 }
 
 async function callModel(userText, plan) {
@@ -344,13 +407,20 @@ ${SKILL.dyadicContext.join("\n")}
 - 用户已明确校正：“叔叔/叔”都是用户喊 Jonathon 的，不是 Jonathon 喊用户。
 - Jonathon 回复用户时默认用“你”，或直接不加称呼；除非用户明确要求，否则不要喊用户“叔叔/叔”。
 - 如果用户在消息里喊 Jonathon“叔叔”，可以自然承接，但不要把这个称呼换到用户身上。
-- “爸爸/儿子”是最新截图里真实存在的玩笑称呼，不等同于“叔叔”。用户喊“爸爸”或自称“儿子”时，Jonathon可以短接“儿子怎么了”“快请爸爸喝咖啡”等，但不要每轮都这样用。
+- “爸爸/儿子”是最新截图里真实存在的玩笑称呼，不等同于“叔叔”。用户单独喊“爸爸”或自称“儿子”时，Jonathon可以短接“儿子怎么了”“快请爸爸喝咖啡”等，但不要每轮都这样用。
+- 称呼加问候时，问候优先：如“爸爸早安”“爸爸早”“叔叔早安”应回“早”，不要回“儿子怎么了”。
 - 严格区分两侧风格：用户侧更主动、更长、更常喊叔叔；Jonathon 侧更短、更淡、更克制。
 - 禁止空泛重复“嗯...我在”“我在”。如果用户发“？”或追问前一句，要回答前一句的具体含义。
 - 当用户问“这个点睡觉？不是应该在上班吗”，更合理的 Jonathon 回复是“在上班”“摸会儿鱼”“刚看手机”，不要再次说“我在”。
 - 当当前时间是 16:00-17:59，优先套用历史时间画像：下班前后、开车、接娃、等儿子下课、孩子训练。此时除非用户明确说昨晚没睡/午睡，不要回答“刚醒”。
 - 原始样本包括：“还在等儿子下课”“三点就放学了 / 现在羽毛球训练”“孩子打羽毛球”“刚下班在开车”“去接娃”。
 - 权重规则：全量 10,758 条必须用于关系背景和事件记忆；最近 2,000 条用于主要语气；2026-06-24截图增量是最新校准，处理爸爸/儿子、咖啡、戒烟、喝酒、电影邀约时优先参考。时间越近，回复方式权重越高。
+
+不要太死板：
+- 任何样本句都不是“关键词 -> 固定回复”的规则。它们只说明 Jonathon 的语气范围。
+- 回复前先问自己：用户现在是在问候、关心、约事情、追问上一句，还是撒娇叫人？先处理这个真实意图。
+- 如果一个词同时能触发多种记忆，以整句话和上一轮上下文为准，不要为了命中样本而忽略用户刚说的话。
+- 可以短，但不能短到逻辑断裂；可以像，但不能机械复读。
 
 时间段规则：
 ${SKILL.timeRules.join("\n")}
@@ -446,11 +516,16 @@ function addMessage(role, content, thought = "") {
 }
 
 function renderThinking(text) {
+  return;
   const item = document.createElement("div");
   item.className = "thinking-card";
   item.textContent = text;
   chatLog.appendChild(item);
   chatLog.scrollTop = chatLog.scrollHeight;
+}
+
+function removeVisibleThoughtCards() {
+  document.querySelectorAll(".thinking-card").forEach((node) => node.remove());
 }
 
 function render() {
@@ -468,20 +543,16 @@ function render() {
     bubble.textContent = message.content;
     row.append(avatar, bubble);
     chatLog.appendChild(row);
-    if (state.showPlan && message.role === "assistant" && message.thought) {
-      const thought = document.createElement("div");
-      thought.className = "thinking-card";
-      thought.textContent = message.thought;
-      chatLog.appendChild(thought);
-    }
   }
   planToggle.classList.toggle("active", state.showPlan);
+  removeVisibleThoughtCards();
   chatLog.scrollTop = chatLog.scrollHeight;
 }
 
 function imageAvatar() {
   const div = document.createElement("div");
   div.className = "bubble-avatar assistant-avatar";
+  div.setAttribute("aria-label", "Jonathon avatar 0");
   div.textContent = "0";
   return div;
 }
@@ -489,6 +560,7 @@ function imageAvatar() {
 function userAvatar() {
   const div = document.createElement("div");
   div.className = "bubble-avatar user-avatar";
+  div.setAttribute("aria-label", "User avatar 1");
   div.textContent = "1";
   return div;
 }
